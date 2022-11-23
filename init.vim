@@ -1,5 +1,6 @@
 language en_US
 
+set noswapfile
 set cursorline
 set number
 set expandtab

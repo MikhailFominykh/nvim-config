@@ -1,5 +1,6 @@
 vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<CR>")
 vim.keymap.set("n", "<leader>b", "<cmd>Telescope buffers<CR>")
+vim.keymap.set("n", "<leader><leader>x", "<cmd>w<cr><cmd>source %<cr>")
 
 require('telescope').setup {
   defaults = {
@@ -30,7 +31,7 @@ require('nvim-treesitter.configs').setup {
 -- rust analyzer setup
 local nvim_lsp = require('lspconfig')
 
-local lsp_rust_on_attach = function(client, bufnr)
+local lsp_on_attach = function(_, bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
     vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = 0 })
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = 0 })
@@ -41,7 +42,7 @@ local lsp_rust_on_attach = function(client, bufnr)
 end
 
 nvim_lsp.rust_analyzer.setup {
-    on_attach = lsp_rust_on_attach,
+    on_attach = lsp_on_attach,
     settings = {
         ["rust-analyzer"] = {
             imports = {
@@ -58,6 +59,26 @@ nvim_lsp.rust_analyzer.setup {
             procMacro = {
                 enable = true
             },
+        }
+    }
+}
+
+nvim_lsp.sumneko_lua.setup {
+    on_attach = lsp_on_attach,
+    settings = {
+        Lua = {
+            runtime = {
+                version = "LuaJIT"
+            },
+            diagnostics = {
+                globals = { "vim" }
+            },
+            workspace = {
+                library = vim.api.nvim_get_runtime_file("", true)
+            },
+            telemetry = {
+                enable = false
+            }
         }
     }
 }
