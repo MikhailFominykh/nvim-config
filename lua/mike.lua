@@ -3,34 +3,35 @@ vim.keymap.set("n", "<leader>b", "<cmd>Telescope buffers<CR>")
 vim.keymap.set("n", "<leader><leader>x", "<cmd>w<cr><cmd>source %<cr>")
 
 require('telescope').setup {
-  defaults = {
-    prompt_prefix = "$ ",
-  }
+    defaults = {
+        prompt_prefix = "$ ",
+    }
 }
 require('telescope').load_extension('fzf')
 require('nvim-treesitter.configs').setup {
-  ensure_installed = { "c", "lua", "rust" },
+    ensure_installed = { "c", "lua", "rust" },
 
-  -- Install parsers synchronously (only applied to `ensure_installed`)
-  sync_install = false,
+    -- Install parsers synchronously (only applied to `ensure_installed`)
+    sync_install = false,
 
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-  auto_install = false,
+    -- Automatically install missing parsers when entering buffer
+    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+    auto_install = false,
 
-  highlight = {
-    enable = true,
-    disable = { "help" },
-    additional_vim_regex_highlighting = false,
-  },
-  indent = {
-      enable = true
-  }
+    highlight = {
+        enable = true,
+        disable = { "help" },
+        additional_vim_regex_highlighting = false,
+    },
+    indent = {
+        enable = true
+    }
 }
 
 -- nvim-cmp setup
 local cmp = require('cmp')
 local lspkind = require('lspkind')
+local luasnip = require('luasnip')
 cmp.setup {
     snippet = {
         expand = function(args)
@@ -56,7 +57,27 @@ cmp.setup {
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.abort(),
-        ['<cr>'] = cmp.mapping.confirm({ select = true })
+        ['<cr>'] = cmp.mapping.confirm({ select = true }),
+
+        ["<Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+            else
+                fallback()
+            end
+        end, { "i", "s" }),
+
+        ["<S-Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+                luasnip.jump(-1)
+            else
+                fallback()
+            end
+        end, { "i", "s" }),
     }),
     sources = cmp.config.sources({
         { name = 'nvim_lua' },
@@ -64,9 +85,9 @@ cmp.setup {
         { name = 'luasnip' },
         { name = 'path' },
     },
-    {
-        { name = 'buffer' }
-    })
+        {
+            { name = 'buffer' }
+        })
 }
 
 cmp.setup.cmdline({ '/', '?' }, {
