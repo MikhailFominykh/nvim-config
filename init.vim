@@ -1,8 +1,12 @@
 language en_US
 
+au WinLeave * set nocursorline
+au WinEnter * set cursorline
+
+set laststatus=3
 set noswapfile
-set cursorline
 set number
+set relativenumber
 set expandtab
 set shiftwidth=4
 
