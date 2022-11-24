@@ -26,6 +26,7 @@ hi CursorLine guibg=#2e3440
 let mapleader = " "
 nnoremap <F4> <cmd>source ~\AppData\Local\nvim\init.vim<CR>
 nnoremap <M-1> <cmd>copen<CR>
+nnoremap <C-/> <cmd>lua require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_ivy()) <cr>
 
 lua require('plugins')
 lua require('mike')
