@@ -22,7 +22,7 @@ local function try_parse_message(m)
     end
 end
 
-local function set_qflist_from_cargo_task_output(_, data)
+local function set_qflist_from_cargo_task_output(data)
     if not data then
         return
     end
@@ -47,14 +47,19 @@ local function set_qflist_from_cargo_task_output(_, data)
 end
 
 local function run_task(task_name)
+    local stdout_data
     vim.fn.jobstart(
         { "cargo", task_name, "--message-format", "json-diagnostic-short" },
         {
             stdout_buffered = true,
-            on_stdout = set_qflist_from_cargo_task_output,
+            on_stdout = function(_, data)
+                stdout_data = data
+            end,
+            on_exit = function()
+                set_qflist_from_cargo_task_output(stdout_data)
+            end
         })
 end
-
 
 M.cargo_build = function()
     run_task("build")
