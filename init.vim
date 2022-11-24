@@ -24,9 +24,16 @@ hi Normal guibg=#232730
 hi CursorLine guibg=#2e3440
 
 let mapleader = " "
+
+nnoremap <leader><leader>x <cmd>w<cr><cmd>source %<cr>
 nnoremap <F4> <cmd>source ~\AppData\Local\nvim\init.vim<CR>
-nnoremap <M-1> <cmd>copen<CR>
 nnoremap <C-/> <cmd>lua require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_ivy()) <cr>
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>b <cmd>Telescope buffers<cr>
+" Quickfix list mappings.
+nnoremap <M-j> <cmd>cnext<cr>
+nnoremap <M-k> <cmd>cprev<cr>
+nnoremap <leader>q <cmd>lua require('mike').toggle_quickfix_window()<cr>
 
 lua require('plugins')
 lua require('mike')

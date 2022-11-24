@@ -1,15 +1,14 @@
-vim.keymap.set("n", "<leader><leader>x", "<cmd>w<cr><cmd>source %<cr>")
-vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<CR>")
-vim.keymap.set("n", "<leader>b", "<cmd>Telescope buffers<CR>")
-vim.keymap.set("n", "<leader>q", function()
+local M = {}
+
+M.toggle_quickfix_window = function()
     local bufnr = vim.api.nvim_get_current_buf()
     local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
     if buftype == "quickfix" then
-        vim.cmd "cclose"
+        vim.cmd.cclose()
     else
-        vim.cmd "copen"
+        vim.cmd.copen()
     end
-end)
+end
 
 require('telescope').setup {
     defaults = {
@@ -209,3 +208,5 @@ lspconfig.sumneko_lua.setup {
         }
     }
 }
+
+return M
