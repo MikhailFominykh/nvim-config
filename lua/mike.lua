@@ -1,6 +1,15 @@
+vim.keymap.set("n", "<leader><leader>x", "<cmd>w<cr><cmd>source %<cr>")
 vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<CR>")
 vim.keymap.set("n", "<leader>b", "<cmd>Telescope buffers<CR>")
-vim.keymap.set("n", "<leader><leader>x", "<cmd>w<cr><cmd>source %<cr>")
+vim.keymap.set("n", "<leader>q", function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
+    if buftype == "quickfix" then
+        vim.cmd "cclose"
+    else
+        vim.cmd "copen"
+    end
+end)
 
 require('telescope').setup {
     defaults = {
@@ -9,7 +18,7 @@ require('telescope').setup {
 }
 require('telescope').load_extension('fzf')
 require('nvim-treesitter.configs').setup {
-    ensure_installed = { "c", "lua", "rust" },
+    ensure_installed = { "c", "lua", "rust", "vim" },
 
     -- Install parsers synchronously (only applied to `ensure_installed`)
     sync_install = false,
@@ -55,7 +64,7 @@ cmp.setup {
     mapping = cmp.mapping.preset.insert({
         ['<C-b>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
-        ['<C-Space'] = cmp.mapping.complete(),
+        ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.abort(),
         ['<C-y>'] = cmp.mapping.confirm({ select = true }),
 
@@ -86,7 +95,7 @@ cmp.setup {
         { name = 'path' },
     },
         {
-            { name = 'buffer' }
+            { name = 'buffer', keyword_length = 3 }
         })
 }
 
@@ -117,6 +126,11 @@ local lsp_on_attach_common = function(_, bufnr)
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = 0 })
     vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, { buffer = 0 })
     vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { buffer = 0 })
+    vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = 0 })
+    vim.keymap.set("n", "gws", vim.lsp.buf.workspace_symbol, { buffer = 0 })
+    vim.keymap.set("n", "gs", vim.lsp.buf.document_symbol, { buffer = 0 })
+    vim.keymap.set("n", "<leader>cf", vim.lsp.buf.format, { buffer = 0 })
+    vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = 0 })
     vim.keymap.set("n", "<leader>df", vim.diagnostic.goto_next, { buffer = 0 })
     vim.keymap.set("n", "<leader>db", vim.diagnostic.goto_prev, { buffer = 0 })
     vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = 0 })
@@ -154,9 +168,6 @@ lspconfig.rust_analyzer.setup {
         }
     }
 }
-
--- rust utilites setup
-
 
 -- sumneko_lua setup
 lspconfig.sumneko_lua.setup {

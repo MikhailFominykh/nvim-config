@@ -19,6 +19,10 @@ hi Visual guibg=#08335E
 hi LineNr guifg=#606060
 hi CursorLineNr guifg=#a0a0a0
 
+colorscheme nord
+hi Normal guibg=#232730
+hi CursorLine guibg=#2e3440
+
 let mapleader = " "
 nnoremap <F4> <cmd>source ~\AppData\Local\nvim\init.vim<CR>
 nnoremap <M-1> <cmd>copen<CR>
