@@ -1,6 +1,6 @@
 local M = {}
 
-local try_parse_message = function(m)
+local function try_parse_message(m)
     -- Last message 'aborting due to previous error' has no spans.
     if m.reason ~= "compiler-message" or #m.message.spans == 0 then
         return
@@ -22,37 +22,36 @@ local try_parse_message = function(m)
     end
 end
 
-local set_task_result = function(task_name, list)
+local function set_qflist_from_cargo_task_output(_, data)
+    if not data then
+        return
+    end
+    local list = {}
+    for _, s in ipairs(data) do
+        if s ~= nil and #s > 0 then
+            local decoded = vim.json.decode(s)
+            local parsed = try_parse_message(decoded)
+            if parsed then
+                table.insert(list, parsed)
+            end
+        end
+    end
     if #list > 0 then
         vim.fn.setqflist(list)
         vim.cmd "copen"
     else
         vim.fn.setqflist({})
         vim.cmd "cclose"
-        print("Cargo " .. task_name .. " complete")
+        print("Cargo task complete")
     end
 end
 
-local run_task = function(task_name)
-    local job_id = vim.fn.jobstart({ "cargo", task_name, "--message-format", "json-diagnostic-short" },
+local function run_task(task_name)
+    vim.fn.jobstart(
+        { "cargo", task_name, "--message-format", "json-diagnostic-short" },
         {
             stdout_buffered = true,
-            on_stdout = function(_, data)
-                if not data then
-                    return
-                end
-                local list = {}
-                for _, s in ipairs(data) do
-                    if s ~= nil and #s > 0 then
-                        local decoded = vim.json.decode(s)
-                        local parsed = try_parse_message(decoded)
-                        if parsed then
-                            table.insert(list, parsed)
-                        end
-                    end
-                end
-                set_task_result(task_name, list)
-            end,
+            on_stdout = set_qflist_from_cargo_task_output,
         })
 end
 
