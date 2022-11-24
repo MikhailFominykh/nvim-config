@@ -21,6 +21,7 @@ hi CursorLineNr guifg=#a0a0a0
 
 let mapleader = " "
 nnoremap <F4> <cmd>source ~\AppData\Local\nvim\init.vim<CR>
+nnoremap <M-1> <cmd>copen<CR>
 
 lua require('plugins')
 lua require('mike')

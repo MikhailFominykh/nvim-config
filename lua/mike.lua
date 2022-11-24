@@ -57,7 +57,7 @@ cmp.setup {
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.abort(),
-        ['<cr>'] = cmp.mapping.confirm({ select = true }),
+        ['<C-y>'] = cmp.mapping.confirm({ select = true }),
 
         ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
@@ -111,7 +111,7 @@ local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 -- rust analyzer setup
 local lspconfig = require('lspconfig')
 
-local lsp_on_attach = function(_, bufnr)
+local lsp_on_attach_common = function(_, bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
     vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = 0 })
     vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = 0 })
@@ -119,11 +119,22 @@ local lsp_on_attach = function(_, bufnr)
     vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { buffer = 0 })
     vim.keymap.set("n", "<leader>df", vim.diagnostic.goto_next, { buffer = 0 })
     vim.keymap.set("n", "<leader>db", vim.diagnostic.goto_prev, { buffer = 0 })
+    vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = 0 })
+end
+
+local lsp_on_attach_rust = function(_, bufnr)
+    lsp_on_attach_common(_, bufnr)
+    vim.keymap.set("n", "<F6>",
+        function()
+            vim.cmd "wall"
+            require('rust').cargo_build()
+        end,
+        { buffer = 0 })
 end
 
 lspconfig.rust_analyzer.setup {
     capabilities = cmp_capabilities,
-    on_attach = lsp_on_attach,
+    on_attach = lsp_on_attach_rust,
     settings = {
         ["rust-analyzer"] = {
             imports = {
@@ -150,7 +161,7 @@ lspconfig.rust_analyzer.setup {
 -- sumneko_lua setup
 lspconfig.sumneko_lua.setup {
     capabilities = cmp_capabilities,
-    on_attach = lsp_on_attach,
+    on_attach = lsp_on_attach_common,
     settings = {
         Lua = {
             runtime = {
