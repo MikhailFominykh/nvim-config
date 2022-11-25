@@ -5,19 +5,21 @@ au WinEnter * set cursorline
 
 set laststatus=3
 set noswapfile
+set nobackup
+set nowritebackup
 set number
 set relativenumber
 set expandtab
 set shiftwidth=4
 
 set termguicolors
-hi CursorLine cterm=underline guibg=#303030
-hi Normal ctermbg=black ctermfg=white guibg=#262626 guifg=#C6AE7A
-hi Pmenu ctermbg=bg ctermfg=fg guibg=#404040 guifg=fg
-hi PmenuSel ctermbg=fg ctermfg=bg guibg=#323232 guifg=fg
-hi Visual guibg=#08335E
-hi LineNr guifg=#606060
-hi CursorLineNr guifg=#a0a0a0
+"hi CursorLine cterm=underline guibg=#303030
+"hi Normal ctermbg=black ctermfg=white guibg=#262626 guifg=#C6AE7A
+"hi Pmenu ctermbg=bg ctermfg=fg guibg=#404040 guifg=fg
+"hi PmenuSel ctermbg=fg ctermfg=bg guibg=#323232 guifg=fg
+"hi Visual guibg=#08335E
+"hi LineNr guifg=#606060
+"hi CursorLineNr guifg=#a0a0a0
 
 colorscheme nord
 hi Normal guibg=#232730
