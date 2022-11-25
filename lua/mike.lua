@@ -139,10 +139,11 @@ local lspconfig = require('lspconfig')
 
 local lsp_on_attach_common = function(_, bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    -- Common lsp mappings.
     vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = 0 })
     local telescope = require('telescope.builtin')
     vim.keymap.set("n", "gd", telescope.lsp_definitions, { buffer = 0 })
-    vim.keymap.set("n", "gt", telescope.lsp_definitions, { buffer = 0 })
+    vim.keymap.set("n", "gt", telescope.lsp_type_definitions, { buffer = 0 })
     vim.keymap.set("n", "gi", telescope.lsp_implementations, { buffer = 0 })
     vim.keymap.set("n", "gr", telescope.lsp_references, { buffer = 0 })
     vim.keymap.set("n", "gws", telescope.lsp_workspace_symbols, { buffer = 0 })
@@ -151,6 +152,7 @@ local lsp_on_attach_common = function(_, bufnr)
     vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = 0 })
     vim.keymap.set("n", "<leader>df", vim.diagnostic.goto_next, { buffer = 0 })
     vim.keymap.set("n", "<leader>db", vim.diagnostic.goto_prev, { buffer = 0 })
+    vim.keymap.set("n", "<leader>dl", telescope.diagnostics, { buffer = 0 })
     vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = 0 })
 end
 
