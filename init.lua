@@ -31,6 +31,9 @@ vim.api.nvim_create_autocmd({ "WinEnter", "WinLeave" }, {
     callback = function(t) vim.opt.cursorline = t.event == "WinEnter" end
 })
 
+-- Replace selected text without changing default register
+vim.keymap.set("x", "<leader>p", '"_dP')
+
 -- Telescope mappings
 local telescope = require("telescope.builtin")
 vim.keymap.set("n", "<C-/>", function() telescope.current_buffer_fuzzy_find(require("telescope.themes").get_ivy()) end)
