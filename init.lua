@@ -31,23 +31,25 @@ vim.api.nvim_create_autocmd({ "WinEnter", "WinLeave" }, {
     callback = function(t) vim.opt.cursorline = t.event == "WinEnter" end
 })
 
-local ks = vim.keymap.set
 -- Telescope mappings
 local telescope = require("telescope.builtin")
-ks("n", "<C-/>", function() telescope.current_buffer_fuzzy_find(require("telescope.themes").get_ivy()) end)
-ks("n", "<leader>ff", telescope.find_files)
-ks("n", "<leader>b", telescope.buffers)
+vim.keymap.set("n", "<C-/>", function() telescope.current_buffer_fuzzy_find(require("telescope.themes").get_ivy()) end)
+vim.keymap.set("n", "<leader>ff", telescope.find_files)
+vim.keymap.set("n", "<leader>b", telescope.buffers)
 
 -- Quickfix mappings
-ks("n", "<M-j>", vim.cmd.cnext)
-ks("n", "<M-k>", vim.cmd.cprev)
-ks("n", "<leader>q", require("mike").toggle_quickfix_window)
+vim.keymap.set("n", "<M-j>", vim.cmd.cnext)
+vim.keymap.set("n", "<M-k>", vim.cmd.cprev)
+vim.keymap.set("n", "<leader>q", require("mike").toggle_quickfix_window)
 
 -- Tabs mappings
-ks("n", "<M-.>", vim.cmd.tabnext)
-ks("n", "<M-,>", vim.cmd.tabprev)
+vim.keymap.set("n", "<M-.>", vim.cmd.tabnext)
+vim.keymap.set("n", "<M-,>", vim.cmd.tabprev)
 
-ks("n", "<leader><leader>x", function()
+-- Toggle line wrapping
+vim.keymap.set("n", "<leader>w", function() vim.opt.wrap = not vim.opt.wrap:get() end)
+
+vim.keymap.set("n", "<leader><leader>x", function()
     vim.cmd.write()
     vim.cmd.source("%")
 end)
