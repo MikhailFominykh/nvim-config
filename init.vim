@@ -34,6 +34,9 @@ nnoremap <leader>b <cmd>Telescope buffers<cr>
 nnoremap <M-j> <cmd>cnext<cr>
 nnoremap <M-k> <cmd>cprev<cr>
 nnoremap <leader>q <cmd>lua require('mike').toggle_quickfix_window()<cr>
+" Tab mappings
+nnoremap <M-.> <cmd>tabnext<cr>
+nnoremap <M-,> <cmd>tabprev<cr>
 
 lua require('plugins')
 lua require('mike')
