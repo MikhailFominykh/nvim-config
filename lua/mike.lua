@@ -212,4 +212,7 @@ lspconfig.sumneko_lua.setup {
     }
 }
 
+-- Comment.nvim
+require("Comment").setup()
+
 return M
