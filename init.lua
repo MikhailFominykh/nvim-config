@@ -10,12 +10,12 @@ vim.opt.expandtab = true
 vim.opt.hlsearch = false
 vim.opt.incsearch = true
 vim.opt.smartindent = true
-
 vim.opt.laststatus = 3
-
+vim.opt.termguicolors = true
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.writebackup = false
+vim.opt.autoread = true
 
 vim.g.mapleader = " "
 
