@@ -31,3 +31,16 @@ vim.keymap.set("n", "<leader><leader>P", '"+P')
 vim.keymap.set("n", "Q", "<nop>")
 
 vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
+
+-- Quickfix mappings
+vim.keymap.set("n", "<M-j>", vim.cmd.cnext)
+vim.keymap.set("n", "<M-k>", vim.cmd.cprev)
+vim.keymap.set("n", "<leader>q", function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
+    if buftype == "quickfix" then
+        vim.cmd.cclose()
+    else
+        vim.cmd.copen()
+    end
+end)
