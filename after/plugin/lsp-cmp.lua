@@ -1,63 +1,8 @@
-local M = {}
-
-M.toggle_quickfix_window = function()
-    local bufnr = vim.api.nvim_get_current_buf()
-    local buftype = vim.api.nvim_buf_get_option(bufnr, "buftype")
-    if buftype == "quickfix" then
-        vim.cmd.cclose()
-    else
-        vim.cmd.copen()
-    end
-end
-
-require('telescope').setup {
-    defaults = {
-        prompt_prefix = "$ ",
-    }
-}
-require('telescope').load_extension('fzf')
-require('nvim-treesitter.configs').setup {
-    ensure_installed = { "c", "lua", "rust", "vim" },
-
-    -- Install parsers synchronously (only applied to `ensure_installed`)
-    sync_install = false,
-
-    -- Automatically install missing parsers when entering buffer
-    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-    auto_install = false,
-
-    highlight = {
-        enable = true,
-        disable = { "help" },
-        additional_vim_regex_highlighting = false,
-    },
-    indent = {
-        enable = true
-    },
-    playground = {
-        enable = true,
-        disable = {},
-        updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
-        persist_queries = false, -- Whether the query persists across vim sessions
-        keybindings = {
-            toggle_query_editor = 'o',
-            toggle_hl_groups = 'i',
-            toggle_injected_languages = 't',
-            toggle_anonymous_nodes = 'a',
-            toggle_language_display = 'I',
-            focus_language = 'f',
-            unfocus_language = 'F',
-            update = 'R',
-            goto_node = '<cr>',
-            show_help = '?',
-        },
-    }
-}
-
 -- nvim-cmp setup
 local cmp = require('cmp')
 local lspkind = require('lspkind')
 local luasnip = require('luasnip')
+local cmp_select = { behavior = cmp.SelectBehavior.Select }
 cmp.setup {
     snippet = {
         expand = function(args)
@@ -79,6 +24,8 @@ cmp.setup {
         }
     },
     mapping = cmp.mapping.preset.insert({
+        ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+        ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
         ['<C-b>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
@@ -163,7 +110,7 @@ local lsp_on_attach_rust = function(_, bufnr)
     vim.keymap.set("n", "<F6>",
         function()
             vim.cmd.wall()
-            require('rust').cargo_build()
+            require('rrlynx.rust').cargo_build()
         end,
         { buffer = 0 })
 end
@@ -212,8 +159,3 @@ lspconfig.sumneko_lua.setup {
         }
     }
 }
-
--- Comment.nvim
-require("Comment").setup()
-
-return M

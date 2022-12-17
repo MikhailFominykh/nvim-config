@@ -44,6 +44,7 @@ return require('packer').startup(function(use)
     use 'onsails/lspkind.nvim'
     use 'arcticicestudio/nord-vim'
     use { 'numToStr/Comment.nvim' }
+    use 'mbbill/undotree'
 
     if packer_bootstrap then
         require('packer').sync()
