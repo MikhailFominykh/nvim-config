@@ -65,8 +65,8 @@ M.cargo_build = function()
     run_task("build")
 end
 
-M.cargo_check = function()
-    run_task("check")
+M.cargo_clippy = function()
+    run_task("clippy")
 end
 
 return M
