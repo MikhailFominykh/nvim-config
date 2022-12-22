@@ -45,3 +45,9 @@ vim.keymap.set("n", "<leader>q", function()
         vim.cmd.copen()
     end
 end, { desc = "Toggle quickfix window" })
+
+vim.keymap.set("v", "<leader>`", "c`<c-r>\"`<esc>", { desc = "`Sourround a text`" })
+vim.keymap.set("v", "<leader>'", "c'<c-r>\"'<esc>", { desc = "'Sourround a text'" })
+vim.keymap.set("v", "<leader>\"", "c\"<c-r>\"\"<esc>", { desc = "\"Sourround a text\"" })
+vim.keymap.set("v", "<leader>[", "c[<c-r>\"]<esc>", { desc = "[Sourround a text]" })
+vim.keymap.set("v", "<leader>(", "c(<c-r>\")<esc>", { desc = "(Sourround a text)" })
