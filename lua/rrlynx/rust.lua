@@ -8,7 +8,10 @@ local function try_parse_message(m)
 
     local item = { text = m.message.message, type = "E" }
     if m.message.level == "error" then
-        item.nr = m.message.code.code
+        local code = m.message.code;
+        if code ~= vim.NIL then
+            item.nr = code.code
+        end
     elseif m.message.level == "warning" then
         item.type = "W"
     end
