@@ -116,6 +116,20 @@ local lsp_on_attach_rust = function(_, bufnr)
             require('rrlynx.rust').cargo_build()
         end,
         { buffer = 0, desc = "Run cargo build" })
+
+    vim.keymap.set("n", "<F7>",
+        function()
+            local triple = vim.fn.input("Target triple: ");
+            if #triple == 0 then
+                triple = nil
+            end
+            lspconfig.rust_analyzer.setup {
+                settings = {
+                    ["rust-analyzer"] = { cargo = { target = triple } }
+                }
+            }
+        end,
+        { buffer = 0, desc = "Set target triple" })
 end
 
 lspconfig.rust_analyzer.setup {
@@ -128,11 +142,6 @@ lspconfig.rust_analyzer.setup {
                     group = "module",
                 },
                 prefix = "self",
-            },
-            cargo = {
-                buildScripts = {
-                    enable = true,
-                },
             },
             procMacro = {
                 enable = true
