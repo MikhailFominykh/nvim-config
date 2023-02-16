@@ -110,14 +110,22 @@ end
 
 local lsp_on_attach_rust = function(_, bufnr)
     lsp_on_attach_common(_, bufnr)
+
     vim.keymap.set("n", "<F6>",
         function()
             vim.cmd.wall()
             require('rrlynx.rust').cargo_build()
         end,
-        { buffer = 0, desc = "Run cargo build" })
+        { buffer = bufnr, desc = "Run cargo build" })
 
     vim.keymap.set("n", "<F7>",
+        function()
+            vim.cmd.wall();
+            require("rrlynx.rust").run_build_cmd();
+        end,
+        { buffer = bufnr, desc = "Run build.cmd" })
+
+    vim.keymap.set("n", "<F8>",
         function()
             local triple = vim.fn.input("Target triple: ");
             if #triple == 0 then
@@ -129,7 +137,7 @@ local lsp_on_attach_rust = function(_, bufnr)
                 }
             }
         end,
-        { buffer = 0, desc = "Set target triple" })
+        { buffer = bufnr, desc = "Set target triple" })
 end
 
 lspconfig.rust_analyzer.setup {

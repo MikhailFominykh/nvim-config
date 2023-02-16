@@ -64,6 +64,21 @@ local function run_task(task_name)
         })
 end
 
+M.run_build_cmd = function()
+    local stdout_data
+    vim.fn.jobstart(
+        { "cmd", "/c", "build.cmd" },
+        {
+            stdout_buffered = true,
+            on_stdout = function(_, data)
+                stdout_data = data
+            end,
+            on_exit = function()
+                set_qflist_from_cargo_task_output(stdout_data)
+            end
+        })
+end
+
 M.cargo_build = function()
     run_task("build")
 end
