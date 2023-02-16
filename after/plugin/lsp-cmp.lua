@@ -150,8 +150,8 @@ lspconfig.rust_analyzer.setup {
     }
 }
 
--- sumneko_lua setup
-lspconfig.sumneko_lua.setup {
+-- lua setup
+lspconfig.lua_ls.setup {
     capabilities = cmp_capabilities,
     on_attach = lsp_on_attach_common,
     settings = {
