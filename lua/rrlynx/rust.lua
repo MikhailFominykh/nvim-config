@@ -41,7 +41,7 @@ local function set_qflist_from_cargo_task_output(data)
     end
     if #list > 0 then
         vim.fn.setqflist(list)
-        vim.cmd "copen"
+        vim.cmd "botright copen"
     else
         vim.fn.setqflist({})
         vim.cmd "cclose"
