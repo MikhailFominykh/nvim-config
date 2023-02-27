@@ -108,7 +108,56 @@ local lsp_on_attach_common = function(_, bufnr)
     nmap("<leader>dl", telescope.diagnostics, "Show diagnostics")
 end
 
-local lsp_on_attach_rust = function(_, bufnr)
+local rust_analyzer_settings = {
+    android = {
+        cargo = {
+            target = "aarch64-linux-android"
+        },
+        imports = {
+            granularity = {
+                group = "module",
+            },
+            prefix = "self",
+        },
+        procMacro = {
+            enable = true
+        },
+    },
+    windows = {
+        cargo = {
+            target = "x86_64-pc-windows-msvc"
+        },
+        imports = {
+            granularity = {
+                group = "module",
+            },
+            prefix = "self",
+        },
+        procMacro = {
+            enable = true
+        },
+    },
+}
+
+local lsp_on_attach_rust = nil
+
+local setup_rust_analyzer_with_target = function(target)
+    local settings = rust_analyzer_settings[target]
+    if settings then
+        lspconfig.rust_analyzer.setup {
+            capabilities = cmp_capabilities,
+            on_attach = lsp_on_attach_rust,
+            settings = {
+                ["rust-analyzer"] = settings,
+            }
+        }
+    else
+        print("Unknown target: " .. target)
+    end
+end
+
+lsp_on_attach_rust = function(_, bufnr)
+    print("Attach rust_analyzer to buffer ", bufnr)
     lsp_on_attach_common(_, bufnr)
 
     vim.keymap.set("n", "<F6>",
@@ -127,36 +176,14 @@ local lsp_on_attach_rust = function(_, bufnr)
 
     vim.keymap.set("n", "<F8>",
         function()
-            local triple = vim.fn.input("Target triple: ");
-            if #triple == 0 then
-                triple = nil
-            end
-            lspconfig.rust_analyzer.setup {
-                settings = {
-                    ["rust-analyzer"] = { cargo = { target = triple } }
-                }
-            }
+            local target = vim.fn.input("Rust analyzer target: ")
+            vim.lsp.stop_client(vim.lsp.get_active_clients({ name = "rust_analyzer" }))
+            setup_rust_analyzer_with_target(target)
         end,
         { buffer = bufnr, desc = "Set target triple" })
 end
 
-lspconfig.rust_analyzer.setup {
-    capabilities = cmp_capabilities,
-    on_attach = lsp_on_attach_rust,
-    settings = {
-        ["rust-analyzer"] = {
-            imports = {
-                granularity = {
-                    group = "module",
-                },
-                prefix = "self",
-            },
-            procMacro = {
-                enable = true
-            },
-        }
-    }
-}
+setup_rust_analyzer_with_target("windows")
 
 -- lua setup
 lspconfig.lua_ls.setup {

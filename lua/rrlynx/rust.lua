@@ -1,4 +1,6 @@
-local M = {}
+local M = {
+    build_target = "windows"
+}
 
 local function try_parse_message(m)
     -- Last message 'aborting due to previous error' has no spans.
@@ -65,9 +67,11 @@ local function run_task(task_name)
 end
 
 M.run_build_cmd = function()
+    local build_file = "build_" .. M.build_target .. ".cmd"
+    print("Running " .. build_file)
     local stdout_data
     vim.fn.jobstart(
-        { "cmd", "/c", "build.cmd" },
+        { "cmd", "/c", build_file },
         {
             stdout_buffered = true,
             on_stdout = function(_, data)
