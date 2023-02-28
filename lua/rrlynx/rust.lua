@@ -68,7 +68,7 @@ end
 
 M.run_build_cmd = function()
     local build_file = "build_" .. M.build_target .. ".cmd"
-    print("Running " .. build_file)
+    print("Running", build_file, "...")
     local stdout_data
     vim.fn.jobstart(
         { "cmd", "/c", build_file },
@@ -79,6 +79,7 @@ M.run_build_cmd = function()
             end,
             on_exit = function()
                 set_qflist_from_cargo_task_output(stdout_data)
+                print("Running", build_file, "complete.")
             end
         })
 end
