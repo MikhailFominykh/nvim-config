@@ -151,6 +151,7 @@ local setup_rust_analyzer_with_target = function(target)
                 ["rust-analyzer"] = settings,
             }
         }
+        require("rrlynx.rust").build_target = target
     else
         print("Unknown target: " .. target)
     end
@@ -176,11 +177,15 @@ lsp_on_attach_rust = function(_, bufnr)
 
     vim.keymap.set("n", "<F8>",
         function()
-            local target = vim.fn.input("Rust analyzer target: ")
-            vim.lsp.stop_client(vim.lsp.get_active_clients({ name = "rust_analyzer" }))
-            setup_rust_analyzer_with_target(target)
+            require("rrlynx.select-list").select(
+                "Build target",
+                { "windows", "android" },
+                function(selected)
+                    vim.lsp.stop_client(vim.lsp.get_active_clients({ name = "rust_analyzer" }))
+                    setup_rust_analyzer_with_target(selected.value)
+                end)
         end,
-        { buffer = bufnr, desc = "Set target triple" })
+        { buffer = bufnr, desc = "Select Rust build target" })
 end
 
 setup_rust_analyzer_with_target("windows")
