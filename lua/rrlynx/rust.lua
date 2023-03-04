@@ -31,18 +31,26 @@ local function set_qflist_from_cargo_task_output(data)
     if not data then
         return
     end
-    local list = {}
+    local errors = {}
+    local warnings = {}
     for _, s in ipairs(data) do
         if s ~= nil and #s > 0 then
             local decoded = vim.json.decode(s)
             local parsed = try_parse_message(decoded)
             if parsed then
-                table.insert(list, parsed)
+                if parsed.type == "E" then
+                    table.insert(errors, parsed)
+                else
+                    table.insert(warnings, parsed)
+                end
             end
         end
     end
-    if #list > 0 then
-        vim.fn.setqflist(list)
+    for _, item in ipairs(warnings) do
+        table.insert(errors, item)
+    end
+    if #errors > 0 then
+        vim.fn.setqflist(errors)
         vim.cmd "botright copen"
     else
         vim.fn.setqflist({})
