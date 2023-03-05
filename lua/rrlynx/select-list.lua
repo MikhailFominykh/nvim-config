@@ -5,10 +5,14 @@ M.select = function(title, options, callback)
     for _, o in ipairs(options) do
         max_length = math.max(max_length, string.len(o))
     end
-    max_length = math.max(max_length, string.len(title))
+    max_length = math.max(max_length, string.len(title)) + 2
+    local padded_options = {}
+    for _, opt in ipairs(options) do
+        table.insert(padded_options, " " .. opt .. " ")
+    end
 
     local bufnr = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, options)
+    vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, padded_options)
     vim.api.nvim_buf_set_option(bufnr, "modifiable", false)
     local win = vim.api.nvim_open_win(bufnr, true,
         {
@@ -20,7 +24,8 @@ M.select = function(title, options, callback)
             style = "minimal",
             noautocmd = true,
             border = "single",
-            title = title
+            title = title,
+            title_pos = "center",
         })
     vim.api.nvim_win_set_option(win, "cursorline", true)
     vim.keymap.set("n", "<cr>",
