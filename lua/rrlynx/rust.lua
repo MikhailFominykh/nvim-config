@@ -19,6 +19,10 @@ local function try_parse_message(m)
     end
     for _, span in ipairs(m.message.spans) do
         if span.is_primary then
+            if span.label ~= vim.NIL then
+                print("Span label:", span.label)
+                item.text = item.text .. ". " .. span.label
+            end
             item.filename = span.file_name
             item.lnum = span.line_start
             item.col = span.column_start
