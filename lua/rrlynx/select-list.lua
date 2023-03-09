@@ -14,11 +14,17 @@ M.select = function(title, options, callback)
     local bufnr = vim.api.nvim_create_buf(false, true)
     vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, padded_options)
     vim.api.nvim_buf_set_option(bufnr, "modifiable", false)
+    local window_width = max_length + 2
+    local window_height = #options + 2
+    local cur_win_width = vim.api.nvim_win_get_width(0)
+    local cur_win_height = vim.api.nvim_win_get_height(0)
+    local col = math.max(0, (cur_win_width - window_width) / 2)
+    local row = math.max(0, (cur_win_height - window_height) / 2)
     local win = vim.api.nvim_open_win(bufnr, true,
         {
-            relative = "cursor",
-            row = 0,
-            col = 0,
+            relative = "win",
+            row = row,
+            col = col,
             width = max_length,
             height = table.maxn(options),
             style = "minimal",
