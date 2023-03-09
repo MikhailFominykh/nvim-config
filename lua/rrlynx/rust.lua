@@ -54,7 +54,7 @@ local function set_qflist_from_cargo_task_output(data)
         table.insert(errors, item)
     end
     if #errors > 0 then
-        vim.fn.setqflist(errors)
+        vim.fn.setqflist({}, "r", { title = "Build results", items = errors })
         vim.cmd "botright copen"
     else
         vim.fn.setqflist({})
