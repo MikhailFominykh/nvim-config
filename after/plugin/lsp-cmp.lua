@@ -111,30 +111,47 @@ end
 local rust_analyzer_settings = {
     android = {
         cargo = {
-            target = "aarch64-linux-android"
+            target = "aarch64-linux-android",
+            extraEnv = {
+                RUST_LOG = "error"
+            },
+            buildScripts = {
+                enable = false,
+                invocationLocation = "root",
+                overrideCommand = { "cargo", "ndk", "-t", "aarch64-linux-android", "check", "--quiet",
+                    "--message-format=json", "--lib" }
+            }
+        },
+        check = {
+            checkOnSave = false,
+            overrideCommand = { "cargo", "ndk", "-t", "aarch64-linux-android", "check", "--quiet",
+                "--message-format=json", "--lib" }
         },
         imports = {
             granularity = {
                 group = "module",
             },
             prefix = "self",
-        },
-        procMacro = {
-            enable = true
         },
     },
     windows = {
         cargo = {
-            target = "x86_64-pc-windows-msvc"
+            target = "x86_64-pc-windows-msvc",
+            extraEnv = {
+                RUST_LOG = "error"
+            },
+            buildScripts = {
+                enable = false,
+            },
+        },
+        check = {
+            checkOnSave = false,
         },
         imports = {
             granularity = {
                 group = "module",
             },
             prefix = "self",
-        },
-        procMacro = {
-            enable = true
         },
     },
 }
@@ -188,6 +205,7 @@ lsp_on_attach_rust = function(_, bufnr)
         { buffer = bufnr, desc = "Select Rust build target" })
 end
 
+-- setup_rust_analyzer_with_target("windows")
 setup_rust_analyzer_with_target("windows")
 
 -- lua setup
