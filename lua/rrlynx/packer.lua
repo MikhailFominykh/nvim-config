@@ -46,6 +46,7 @@ return require('packer').startup(function(use)
     use { 'numToStr/Comment.nvim' }
     use 'mbbill/undotree'
     use 'tpope/vim-fugitive'
+    use 'nvim-treesitter/nvim-treesitter-context'
 
     if packer_bootstrap then
         require('packer').sync()
