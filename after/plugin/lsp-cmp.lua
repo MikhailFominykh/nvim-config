@@ -229,3 +229,8 @@ lspconfig.lua_ls.setup {
         }
     }
 }
+
+lspconfig.clangd.setup {
+    capabilities = cmp_capabilities,
+    on_attach = lsp_on_attach_common
+}
